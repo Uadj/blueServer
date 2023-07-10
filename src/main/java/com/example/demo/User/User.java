@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,13 +16,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private int score;
     private int level;
 
+    private int gold;
+
+    private int diamond;
     public User() {
     }
 
-    public User(Long id, String name, int level) {
-        this.id = id;
+    public User(String name, int level) {
         this.name = name;
         this.level = level;
     }

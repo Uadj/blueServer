@@ -1,19 +1,20 @@
-package com.example.demo;
+package com.example.demo.User;
 
+import com.example.demo.Ranking.UserRankingDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -52,5 +53,18 @@ public class UserController {
     public List<User> getAllUsers() {
         String query = "SELECT u FROM User u";
         return entityManager.createQuery(query, User.class).getResultList();
+    }
+
+    @GetMapping("/users/ranking")
+    public List<UserRankingDto> getTopRanking() {
+        List<User> topRanking = userRepository.findTop10ByOrderByScoreDesc();
+        return topRanking.stream().map(this::mapToUserDto).collect(Collectors.toList());
+    }
+
+    private UserRankingDto mapToUserDto(User user) {
+        UserRankingDto userDto = new UserRankingDto();
+        userDto.setScore(user.getScore());
+        userDto.setName(user.getName());
+        return userDto;
     }
 }

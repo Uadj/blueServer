@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.User;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,6 @@ public class UserService {
     }
 
     public void saveUser(User user) {
-        userRepository.saveUser(user);
+        userRepository.save(user);
     }
 }
