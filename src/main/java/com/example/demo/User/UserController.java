@@ -1,5 +1,6 @@
 package com.example.demo.User;
 
+import com.example.demo.Ranking.RankingService;
 import com.example.demo.Ranking.UserRankingDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -12,7 +13,13 @@ import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
+    private final UserService userService;
+    private final RankingService rankingService;
 
+    public UserController(UserService userService, RankingService rankingService) {
+        this.userService = userService;
+        this.rankingService = rankingService;
+    }
     @Autowired
     private UserRepository userRepository;
     @PersistenceContext
@@ -55,16 +62,13 @@ public class UserController {
         return entityManager.createQuery(query, User.class).getResultList();
     }
 
+    @GetMapping("/users/ranking/{username}")
+    public int getUserRank(@PathVariable String username) {
+        return rankingService.getUserRank(username);
+    }
     @GetMapping("/users/ranking")
     public List<UserRankingDto> getTopRanking() {
-        List<User> topRanking = userRepository.findTop10ByOrderByScoreDesc();
-        return topRanking.stream().map(this::mapToUserDto).collect(Collectors.toList());
+        return rankingService.getTopRanking(10);
     }
 
-    private UserRankingDto mapToUserDto(User user) {
-        UserRankingDto userDto = new UserRankingDto();
-        userDto.setScore(user.getScore());
-        userDto.setName(user.getName());
-        return userDto;
-    }
 }

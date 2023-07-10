@@ -22,7 +22,7 @@ public class User {
     private int gold;
 
     private int diamond;
-    public User() {
+    public User() { 
     }
 
     public User(String name, int level) {
