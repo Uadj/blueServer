@@ -68,7 +68,7 @@ public class UserController {
     }
     @GetMapping("/users/ranking")
     public List<UserRankingDto> getTopRanking() {
-        return rankingService.getTopRanking(10);
+        return rankingService.getTopRanking(15);
     }
 
 }

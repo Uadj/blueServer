@@ -16,4 +16,7 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
+    public long getUserCount() {
+        return userRepository.count();
+    }
 }
